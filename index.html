@@ -1,501 +1,402 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.5">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'PingFang SC'; -webkit-text-stroke: #000000}
-    span.s1 {font-kerning: none}
-    span.s2 {font: 12.0px 'PingFang SC'; font-kerning: none}
-    span.s3 {font: 12.0px 'Apple Color Emoji'; font-kerning: none}
-    span.s4 {font: 12.0px Helvetica; font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Visual Clone Pro - 微信适配版</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;700;900&family=Noto+Serif+SC:wght@700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    <style>
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .xhs-card {
+            width: 450px;
+            height: 600px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            background-color: white;
+            transform-origin: top center;
+        }
+
+        .pattern-grid {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .pattern-paper {
+            background-color: #fdfbf7;
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 24px;
+        }
+        
+        .font-sans-sc { font-family: 'Noto Sans SC', sans-serif; }
+        .font-serif-sc { font-family: 'Noto Serif SC', serif; }
+        .font-calligraphy { font-family: 'Ma Shan Zheng', cursive; }
+        .font-handwriting { font-family: 'Zhi Mang Xing', cursive; }
+
+        @media (max-width: 768px) {
+            .mobile-editor-drawer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 50vh;
+                background: white;
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+                z-index: 50;
+                border-top-left-radius: 16px;
+                border-top-right-radius: 16px;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            }
+            .mobile-editor-drawer.active {
+                transform: translateY(0);
+            }
+            .preview-scale-wrapper {
+                transform: scale(0.75);
+                margin-top: -60px;
+                margin-bottom: -60px;
+            }
+        }
+    </style>
 </head>
-<body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="zh-CN"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Visual Clone Pro - </span><span class="s2">微信适配版</span><span class="s1">&lt;/title&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Core Libraries --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Google Fonts --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300;400;700;900&amp;family=Noto+Serif+SC:wght@700&amp;family=Zhi+Mang+Xing&amp;display=swap" rel="stylesheet"&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Custom Scrollbar */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar { width: 4px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-track { background: transparent; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Card Aspect Ratio (Xiaohongshu 3:4) */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Scale down slightly on mobile view in editor to fit better */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.xhs-card {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 450px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 600px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transform-origin: top center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Patterns */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.pattern-grid {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-image: radial-gradient(#cbd5e1 1px, transparent 1px);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-size: 20px 20px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.pattern-paper {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #fdfbf7;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-image: linear-gradient(#e5e7eb 1px, transparent 1px);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-size: 100% 24px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Font Classes */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.font-sans-sc { font-family: 'Noto Sans SC', sans-serif; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.font-serif-sc { font-family: 'Noto Serif SC', serif; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.font-calligraphy { font-family: 'Ma Shan Zheng', cursive; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.font-handwriting { font-family: 'Zhi Mang Xing', cursive; }</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Mobile specific adjustments */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.mobile-editor-drawer {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>position: fixed;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>bottom: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>left: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>right: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>height: 50vh;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>background: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>transform: translateY(100%);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>transition: transform 0.3s ease;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>z-index: 50;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>border-top-left-radius: 16px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>border-top-right-radius: 16px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>box-shadow: 0 -4px 20px rgba(0,0,0,0.1);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.mobile-editor-drawer.active {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>transform: translateY(0);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.preview-scale-wrapper {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>transform: scale(0.75);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>margin-top: -60px; /* Offset the scale gap */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>margin-bottom: -60px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body class="bg-gray-100 h-screen flex flex-col text-slate-800 font-sans overflow-hidden"&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 1. Toolbar --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;nav class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 shadow-sm z-20 flex-shrink-0"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-blue-600 text-white p-1 rounded"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="scan-face" class="w-5 h-5"&gt;&lt;/i&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="font-bold text-sm tracking-tight hidden md:block"&gt;Visual Clone &lt;span class="text-blue-600 text-xs uppercase bg-blue-50 px-1 py-0.5 rounded ml-1"&gt;Pro&lt;/span&gt;&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="font-bold text-sm md:hidden"&gt;V-Clone&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Mobile Toggle Editor Button --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button onclick="toggleMobileEditor()" class="md:hidden flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1.5 rounded text-xs font-medium"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="edit-3" class="w-3 h-3"&gt;&lt;/i&gt; </span><span class="s2">编辑</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Save Button --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button onclick="handleExport()" id="downloadBtn" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors shadow-sm"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="image" class="w-3 h-3"&gt;&lt;/i&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span id="exportText"&gt;</span><span class="s2">生成图片</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Main Layout --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="flex-1 flex overflow-hidden relative"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 2. Editor Sidebar (Responsive) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- On Desktop: Sidebar / On Mobile: Bottom Drawer --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;aside id="editorPanel" class="mobile-editor-drawer md:relative md:w-80 lg:w-96 md:h-full md:transform-none md:border-r border-gray-200 flex flex-col z-40 bg-white"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Mobile Handle --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="md:hidden w-full flex justify-center pt-3 pb-1" onclick="toggleMobileEditor()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="w-10 h-1 bg-gray-300 rounded-full"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="flex-1 overflow-y-auto p-5 space-y-6 pb-20 md:pb-5"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Section: Style Presets --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="palette" class="w-3 h-3"&gt;&lt;/i&gt; </span><span class="s2">风格预设</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-2 gap-2" id="styleSelector"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Section: Content Editor --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="type" class="w-3 h-3"&gt;&lt;/i&gt; </span><span class="s2">内容编辑</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;textarea id="contentInput" class="w-full h-32 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm leading-relaxed resize-none placeholder-gray-400"&gt;&lt;/textarea&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Section: Cover Image --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                     </span>&lt;h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="image" class="w-3 h-3"&gt;&lt;/i&gt; </span><span class="s2">封面配图</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="relative group"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(this)"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div id="imagePreviewArea" class="hidden relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 mb-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;img id="imagePreview" class="w-full h-full object-cover"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;button onclick="removeImage()" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full"&gt;&lt;i data-lucide="x" class="w-3 h-3"&gt;&lt;/i&gt;&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button onclick="document.getElementById('imageInput').click()" id="uploadBtn" class="w-full border-2 border-dashed border-gray-200 rounded-lg p-3 flex items-center justify-center gap-2 text-gray-500 text-sm"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="upload-cloud" class="w-4 h-4"&gt;&lt;/i&gt; </span><span class="s2">上传封面</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Section: Appearance Tweaks --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="bg-gray-50 p-3 rounded-lg border border-gray-100 space-y-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="sliders" class="w-3 h-3"&gt;&lt;/i&gt; </span><span class="s2">外观微调</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="text-xs text-gray-500 w-8"&gt;</span><span class="s2">字体</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;select id="fontSelect" class="flex-1 text-xs border border-gray-200 rounded p-1.5 bg-white" onchange="renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;option value="font-sans-sc"&gt;</span><span class="s2">思源黑体</span><span class="s1">&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;option value="font-serif-sc"&gt;</span><span class="s2">思源宋体</span><span class="s1">&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;option value="font-calligraphy"&gt;</span><span class="s2">马善政毛笔</span><span class="s1">&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;option value="font-handwriting"&gt;</span><span class="s2">志莽行书</span><span class="s1">&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="text-xs text-gray-500 w-8"&gt;</span><span class="s2">大小</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;input type="range" id="fontSizeRange" min="0.8" max="1.3" step="0.05" value="1" class="flex-1 h-1 bg-gray-300 rounded-lg" oninput="renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                     </span>&lt;!-- Colors --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                     </span>&lt;div class="flex items-center gap-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center gap-2 flex-1"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="text-xs text-gray-500"&gt;</span><span class="s2">背景</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="relative w-full h-6 rounded border border-gray-200 overflow-hidden"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;input type="color" id="bgColorPicker" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="updateColorPreview('bg', this.value); renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div id="bgColorPreview" class="w-full h-full bg-white pointer-events-none"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center gap-2 flex-1"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="text-xs text-gray-500"&gt;</span><span class="s2">文字</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="relative w-full h-6 rounded border border-gray-200 overflow-hidden"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;input type="color" id="textColorPicker" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="updateColorPreview('text', this.value); renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div id="textColorPreview" class="w-full h-full bg-gray-800 pointer-events-none"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Section: Meta Data --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-2 gap-3 pt-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;label class="text-xs text-gray-500 mb-1 block"&gt;</span><span class="s2">日期</span><span class="s1">&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="dateInput" value="NO.001" class="w-full text-xs border border-gray-200 rounded p-2" oninput="renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;label class="text-xs text-gray-500 mb-1 block"&gt;</span><span class="s2">署名</span><span class="s1">&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="authorInput" value="@VisualClone" class="w-full text-xs border border-gray-200 rounded p-2" oninput="renderApp()"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- Overlay for Mobile Drawer (Background dimming) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="drawerOverlay" onclick="toggleMobileEditor()" class="fixed inset-0 bg-black/20 z-30 hidden md:hidden transition-opacity"&gt;&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 3. Preview Area --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;main class="flex-1 bg-gray-200 relative overflow-y-auto p-4 md:p-8 flex flex-col items-center gap-4 scroll-smooth" id="previewContainer"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Cards will be injected here --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Hidden Calculation Container --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="measureContainer" class="fixed top-0 left-0 pointer-events-none opacity-0 z-[-1]"&gt;&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Export Modal (For WeChat Long Press) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="exportModal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col items-center justify-center p-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="w-full max-w-md bg-transparent flex flex-col max-h-[90vh]"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="flex justify-between items-center text-white mb-2 px-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span class="text-sm font-bold"&gt;</span><span class="s3">👇</span><span class="s1"> </span><span class="s2">长按图片保存到相册</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button onclick="closeExportModal()" class="p-1 hover:bg-white/20 rounded"&gt;&lt;i data-lucide="x" class="w-6 h-6"&gt;&lt;/i&gt;&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="exportImagesContainer" class="overflow-y-auto flex-1 space-y-4 rounded-lg text-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- Generated Images go here --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// --- Data &amp; Styles ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const defaultText = `</span><span class="s2">如何安装到微信小程序？</span></p>
-<p class="p1"><span class="s1">Visual Clone Pro</span></p>
-<p class="p1"><span class="s1">---</span></p>
-<p class="p3"><span class="s4">1. </span><span class="s1">准备工作</span></p>
-<p class="p3"><span class="s1">微信小程序不支持直接运行</span><span class="s4"> HTML </span><span class="s1">文件。我们需要使用</span><span class="s4"> &lt;web-view&gt; </span><span class="s1">组件。</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p3"><span class="s4">2. </span><span class="s1">操作步骤</span></p>
-<p class="p1"><span class="s1">- </span><span class="s2">部署本代码：将此</span><span class="s1"> HTML </span><span class="s2">文件部署到服务器（如</span><span class="s1"> Vercel, Github Pages</span><span class="s2">），获取</span><span class="s1"> https </span><span class="s2">链接。</span></p>
-<p class="p3"><span class="s4">- </span><span class="s1">小程序后台：登录微信公众平台，在</span><span class="s4">"</span><span class="s1">业务域名</span><span class="s4">"</span><span class="s1">中配置你的域名。</span></p>
-<p class="p1"><span class="s1">- </span><span class="s2">开发者工具：新建小程序项目，在</span><span class="s1"> pages/index/index.wxml </span><span class="s2">中写入：</span></p>
-<p class="p1"><span class="s1">&lt;web-view src="</span><span class="s2">你的</span><span class="s1">https</span><span class="s2">链接</span><span class="s1">"&gt;&lt;/web-view&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p3"><span class="s4">3. </span><span class="s1">体验优化</span></p>
-<p class="p3"><span class="s4">- </span><span class="s1">点击右上角</span><span class="s4">"</span><span class="s1">生成图片</span><span class="s4">"</span></p>
-<p class="p3"><span class="s4">- </span><span class="s1">在弹窗中长按保存</span></p>
-<p class="p3"><span class="s4">- </span><span class="s1">发送到手机相册</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s3">🎉</span><span class="s1"> </span><span class="s2">完成！</span><span class="s1">`;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const styles = {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>minimal: { id: 'minimal', name: '</span><span class="s2">极简风</span><span class="s1">', desc: '</span><span class="s2">干净高级</span><span class="s1">', class: 'bg-white', titleClass: 'text-3xl font-bold mb-4 tracking-tight leading-tight', bodyClass: 'text-lg leading-8 font-light', defaultFont: 'font-sans-sc', defaultColor: '#1e293b', defaultBg: '#ffffff' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>poster: { id: 'poster', name: '</span><span class="s2">大字报</span><span class="s1">', desc: '</span><span class="s2">冲击力强</span><span class="s1">', class: 'bg-[#ff3b30]', titleClass: 'text-4xl font-black mb-4 uppercase tracking-tighter leading-none border-b-4 border-current pb-4', bodyClass: 'text-xl font-bold leading-normal', defaultFont: 'font-sans-sc', defaultColor: '#ffffff', defaultBg: '#ff3b30' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>memo: { id: 'memo', name: '</span><span class="s2">备忘录</span><span class="s1">', desc: '</span><span class="s2">亲切列表</span><span class="s1">', class: 'pattern-paper', titleClass: 'text-2xl font-bold mb-4 px-2', bodyClass: 'text-lg leading-[3rem] font-medium px-2', defaultFont: 'font-sans-sc', defaultColor: '#334155', defaultBg: '#fbfbfd' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>journal: { id: 'journal', name: '</span><span class="s2">手帐风</span><span class="s1">', desc: '</span><span class="s2">可爱拼贴</span><span class="s1">', class: 'pattern-grid', titleClass: 'text-4xl mb-6 transform -rotate-2', bodyClass: 'text-lg leading-loose', defaultFont: 'font-handwriting', defaultColor: '#57534e', defaultBg: '#fffdf5' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>drygoods: { id: 'drygoods', name: '</span><span class="s2">硬核干货</span><span class="s1">', desc: '</span><span class="s2">深色专业</span><span class="s1">', class: 'bg-[#0f172a]', titleClass: 'text-3xl font-bold mb-6 border-l-4 border-blue-500 pl-4', bodyClass: 'text-base leading-7 tracking-wide', defaultFont: 'font-sans-sc', defaultColor: '#e2e8f0', defaultBg: '#0f172a' }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>let currentStyle = 'minimal';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>let coverImageData = null;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// --- Init ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.addEventListener('DOMContentLoaded', () =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>lucide.createIcons();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>initUI();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>resetCustomControls(styles[currentStyle]);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>renderApp();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function initUI() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('contentInput').value = defaultText;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('contentInput').addEventListener('input', debounce(renderApp, 300));</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const styleContainer = document.getElementById('styleSelector');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Object.values(styles).forEach(style =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const btn = document.createElement('button');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.className = `p-2 rounded-lg border text-left transition-all hover:shadow-sm flex flex-col justify-between h-14 ${currentStyle === style.id ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-gray-200 bg-white'}`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.innerHTML = `&lt;span class="font-bold text-xs ${currentStyle === style.id ? 'text-blue-700' : 'text-gray-700'}"&gt;${style.name}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.onclick = () =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>currentStyle = style.id;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>Array.from(styleContainer.children).forEach(c =&gt; c.className = c.className.replace('border-blue-500 bg-blue-50 ring-1 ring-blue-500', 'border-gray-200 bg-white'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btn.className = btn.className.replace('border-gray-200 bg-white', 'border-blue-500 bg-blue-50 ring-1 ring-blue-500');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>resetCustomControls(styles[currentStyle]);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>renderApp();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>styleContainer.appendChild(btn);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// --- Logic ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function parseInput() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const lines = document.getElementById('contentInput').value.split('\n').filter(l =&gt; l.trim());</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return { title: lines[0] || '</span><span class="s2">无标题</span><span class="s1">', paragraphs: lines.slice(1) };</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function renderApp() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const container = document.getElementById('previewContainer');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>container.innerHTML = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const data = parseInput();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const styleObj = styles[currentStyle];</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Settings</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const customFont = document.getElementById('fontSelect').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const fontScale = parseFloat(document.getElementById('fontSizeRange').value);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const customBg = document.getElementById('bgColorPicker').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const customColor = document.getElementById('textColorPicker').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const dateText = document.getElementById('dateInput').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const authorText = document.getElementById('authorInput').value;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Measurement</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const measureBox = document.getElementById('measureContainer');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>measureBox.className = `xhs-card p-8 fixed top-0 left-0 z-[-1] opacity-0 ${styleObj.class} ${customFont}`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>measureBox.style.backgroundColor = customBg;<span class="Apple-converted-space"> </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>measureBox.style.color = customColor;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Builders</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const buildTitle = () =&gt; `&lt;h1 class="${styleObj.titleClass}" style="font-size: ${2.25 * fontScale}rem; line-height: 1.2;"&gt;${data.title}&lt;/h1&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const buildMeta = () =&gt; dateText ? `&lt;div class="text-xs font-mono opacity-60 mb-4 uppercase tracking-widest border-b border-current/20 pb-2 inline-block"&gt;${dateText}&lt;/div&gt;` : '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const buildImage = () =&gt; coverImageData ? `&lt;div class="w-[calc(100%+4rem)] -ml-8 -mt-8 mb-6 h-64 overflow-hidden relative"&gt;&lt;img src="${coverImageData}" class="w-full h-full object-cover"&gt;&lt;/div&gt;` : '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const buildPara = (text) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const isList = text.startsWith('-') || text.match(/^\d+\./);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return `&lt;div class="mb-2 opacity-90 ${styleObj.bodyClass} ${isList ? 'pl-2' : ''}" style="font-size: ${1.125 * fontScale}rem;"&gt;${text}&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Paging</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let cards = [];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const MAX_HEIGHT = 520;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let currentPageContent = [];</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>measureBox.innerHTML = (coverImageData ? buildImage() : '') + buildMeta() + buildTitle();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>currentPageContent.push(measureBox.innerHTML);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>data.paragraphs.forEach(para =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const pHTML = buildPara(para);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const tempDiv = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>tempDiv.innerHTML = pHTML;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>measureBox.appendChild(tempDiv);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (measureBox.offsetHeight &gt; MAX_HEIGHT) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>cards.push(currentPageContent);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>currentPageContent = [pHTML];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>measureBox.innerHTML = pHTML;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>currentPageContent.push(pHTML);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (currentPageContent.length &gt; 0) cards.push(currentPageContent);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// DOM Generation</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>cards.forEach((contentArr, index) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const cardWrapper = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Added 'preview-scale-wrapper' for mobile visual scaling</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cardWrapper.className = `xhs-card flex flex-col p-8 shadow-xl relative group ${styleObj.class} ${customFont} preview-scale-wrapper`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cardWrapper.style.backgroundColor = customBg;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cardWrapper.style.color = customColor;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (styleObj.id === 'minimal') {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>const bar = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>bar.className = 'absolute bottom-0 left-0 w-full h-1.5 opacity-50';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>bar.style.background = `linear-gradient(to right, ${customColor}, transparent)`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>cardWrapper.appendChild(bar);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const inner = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>inner.className = 'flex-1 relative z-10';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>inner.innerHTML = contentArr.join('');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cardWrapper.appendChild(inner);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const footer = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>footer.className = 'mt-auto pt-4 flex justify-between items-center text-[10px] opacity-40 font-mono tracking-widest border-t border-current/10 relative z-10';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>footer.innerHTML = `&lt;span&gt;${index + 1} / ${cards.length}&lt;/span&gt;&lt;span&gt;${authorText}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cardWrapper.appendChild(footer);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>container.appendChild(cardWrapper);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>lucide.createIcons();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// --- Handlers ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function handleExport() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Detect if mobile or desktop to decide strategy?</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// For WeChat/Webview compatibility, always show Image Modal.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const cards = document.querySelectorAll('.xhs-card');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const modal = document.getElementById('exportModal');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const container = document.getElementById('exportImagesContainer');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const btn = document.getElementById('downloadBtn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const originalText = document.getElementById('exportText').innerText;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('exportText').innerText = "</span><span class="s2">生成中</span><span class="s1">...";</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>btn.disabled = true;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>container.innerHTML = ''; // Clear old</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Temporarily remove scale transform for capture</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>cards.forEach(c =&gt; c.classList.remove('preview-scale-wrapper'));</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const promises = Array.from(cards).map(async (card) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return canvas.toDataURL('image/png');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Promise.all(promises).then(images =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>images.forEach(imgData =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const img = document.createElement('img');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>img.src = imgData;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>img.className = 'w-full max-w-[300px] mx-auto rounded shadow-lg border border-gray-700';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>container.appendChild(img);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>modal.classList.remove('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}).catch(err =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>console.error(err);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>alert('</span><span class="s2">生成失败</span><span class="s1">');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}).finally(() =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Restore visual styles</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cards.forEach(c =&gt; c.classList.add('preview-scale-wrapper'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('exportText').innerText = originalText;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.disabled = false;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function closeExportModal() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('exportModal').classList.add('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function resetCustomControls(style) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('fontSelect').value = style.defaultFont;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>updateColorPreview('bg', style.defaultBg);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>updateColorPreview('text', style.defaultColor);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function updateColorPreview(type, val) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const el = document.getElementById(type === 'bg' ? 'bgColorPicker' : 'textColorPicker');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const prev = document.getElementById(type === 'bg' ? 'bgColorPreview' : 'textColorPreview');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>el.value = val;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>prev.style.backgroundColor = val;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function handleImageUpload(input) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (input.files &amp;&amp; input.files[0]) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const reader = new FileReader();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>reader.onload = (e) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>coverImageData = e.target.result;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('imagePreview').src = coverImageData;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('imagePreviewArea').classList.remove('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('uploadBtn').classList.add('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>renderApp();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>reader.readAsDataURL(input.files[0]);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function removeImage() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>coverImageData = null;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('imageInput').value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('imagePreviewArea').classList.add('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('uploadBtn').classList.remove('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>renderApp();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function toggleMobileEditor() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const drawer = document.getElementById('editorPanel');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const overlay = document.getElementById('drawerOverlay');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>drawer.classList.toggle('active');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (drawer.classList.contains('active')) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overlay.classList.remove('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overlay.classList.add('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function debounce(func, wait) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let timeout;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return function(...args) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>clearTimeout(timeout);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>timeout = setTimeout(() =&gt; func.apply(this, args), wait);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+<body class="bg-gray-100 h-screen flex flex-col text-slate-800 font-sans overflow-hidden">
+
+    <nav class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 shadow-sm z-20 flex-shrink-0">
+        <div class="flex items-center gap-2">
+            <div class="bg-blue-600 text-white p-1 rounded">
+                <i data-lucide="scan-face" class="w-5 h-5"></i>
+            </div>
+            <h1 class="font-bold text-sm tracking-tight hidden md:block">Visual Clone <span class="text-blue-600 text-xs uppercase bg-blue-50 px-1 py-0.5 rounded ml-1">Pro</span></h1>
+            <h1 class="font-bold text-sm md:hidden">V-Clone</h1>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <button onclick="toggleMobileEditor()" class="md:hidden flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1.5 rounded text-xs font-medium">
+                <i data-lucide="edit-3" class="w-3 h-3"></i> 编辑
+            </button>
+            <button onclick="handleExport()" id="downloadBtn" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors shadow-sm">
+                <i data-lucide="image" class="w-3 h-3"></i>
+                <span id="exportText">生成图片</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="flex-1 flex overflow-hidden relative">
+        <aside id="editorPanel" class="mobile-editor-drawer md:relative md:w-80 lg:w-96 md:h-full md:transform-none md:border-r border-gray-200 flex flex-col z-40 bg-white">
+            <div class="md:hidden w-full flex justify-center pt-3 pb-1" onclick="toggleMobileEditor()">
+                <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-5 space-y-6 pb-20 md:pb-5">
+                <div>
+                    <h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                        <i data-lucide="palette" class="w-3 h-3"></i> 风格预设
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2" id="styleSelector"></div>
+                </div>
+
+                <div>
+                    <h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                        <i data-lucide="type" class="w-3 h-3"></i> 内容编辑
+                    </h3>
+                    <textarea id="contentInput" class="w-full h-32 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm leading-relaxed resize-none placeholder-gray-400"></textarea>
+                </div>
+
+                <div>
+                     <h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                        <i data-lucide="image" class="w-3 h-3"></i> 封面配图
+                    </h3>
+                    <div class="relative group">
+                        <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(this)">
+                        <div id="imagePreviewArea" class="hidden relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 mb-2">
+                            <img id="imagePreview" class="w-full h-full object-cover">
+                            <button onclick="removeImage()" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full"><i data-lucide="x" class="w-3 h-3"></i></button>
+                        </div>
+                        <button onclick="document.getElementById('imageInput').click()" id="uploadBtn" class="w-full border-2 border-dashed border-gray-200 rounded-lg p-3 flex items-center justify-center gap-2 text-gray-500 text-sm">
+                            <i data-lucide="upload-cloud" class="w-4 h-4"></i> 上传封面
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 space-y-3">
+                    <h3 class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <i data-lucide="sliders" class="w-3 h-3"></i> 外观微调
+                    </h3>
+                    
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500 w-8">字体</span>
+                        <select id="fontSelect" class="flex-1 text-xs border border-gray-200 rounded p-1.5 bg-white" onchange="renderApp()">
+                            <option value="font-sans-sc">思源黑体</option>
+                            <option value="font-serif-sc">思源宋体</option>
+                            <option value="font-calligraphy">马善政毛笔</option>
+                            <option value="font-handwriting">志莽行书</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500 w-8">大小</span>
+                        <input type="range" id="fontSizeRange" min="0.8" max="1.3" step="0.05" value="1" class="flex-1 h-1 bg-gray-300 rounded-lg" oninput="renderApp()">
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2 flex-1">
+                            <span class="text-xs text-gray-500">背景</span>
+                            <div class="relative w-full h-6 rounded border border-gray-200 overflow-hidden">
+                                <input type="color" id="bgColorPicker" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="updateColorPreview('bg', this.value); renderApp()">
+                                <div id="bgColorPreview" class="w-full h-full bg-white pointer-events-none"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-1">
+                            <span class="text-xs text-gray-500">文字</span>
+                            <div class="relative w-full h-6 rounded border border-gray-200 overflow-hidden">
+                                <input type="color" id="textColorPicker" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="updateColorPreview('text', this.value); renderApp()">
+                                <div id="textColorPreview" class="w-full h-full bg-gray-800 pointer-events-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <div>
+                        <label class="text-xs text-gray-500 mb-1 block">日期</label>
+                        <input type="text" id="dateInput" value="NO.001" class="w-full text-xs border border-gray-200 rounded p-2" oninput="renderApp()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 mb-1 block">署名</label>
+                        <input type="text" id="authorInput" value="@VisualClone" class="w-full text-xs border border-gray-200 rounded p-2" oninput="renderApp()">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div id="drawerOverlay" onclick="toggleMobileEditor()" class="fixed inset-0 bg-black/20 z-30 hidden md:hidden transition-opacity"></div>
+
+        <main class="flex-1 bg-gray-200 relative overflow-y-auto p-4 md:p-8 flex flex-col items-center gap-4 scroll-smooth" id="previewContainer">
+        </main>
+    </div>
+
+    <div id="measureContainer" class="fixed top-0 left-0 pointer-events-none opacity-0 z-[-1]"></div>
+
+    <div id="exportModal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md bg-transparent flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center text-white mb-2 px-2">
+                <span class="text-sm font-bold">👇 长按图片保存到相册</span>
+                <button onclick="closeExportModal()" class="p-1 hover:bg-white/20 rounded"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div id="exportImagesContainer" class="overflow-y-auto flex-1 space-y-4 rounded-lg text-center">
+            </div>
+        </div>
+    </div>
+
+<script>
+    const defaultText = `如何安装到微信小程序？\nVisual Clone Pro\n---\n1. 准备工作\n微信小程序不支持直接运行 HTML 文件。我们需要使用 <web-view> 组件。\n\n2. 操作步骤\n- 部署本代码：将此 HTML 文件部署到服务器，获取 https 链接。\n- 小程序后台：登录微信公众平台，在业务域名中配置你的域名。\n- 开发者工具：新建小程序项目，在 pages/index/index.wxml 中写入：\n<web-view src="你的https链接"></web-view>\n\n3. 体验优化\n- 点击右上角"生成图片"\n- 在弹窗中长按保存\n- 发送到手机相册\n\n🎉 完成！`;
+
+    const styles = {
+        minimal: { id: 'minimal', name: '极简风', desc: '干净高级', class: 'bg-white', titleClass: 'text-3xl font-bold mb-4 tracking-tight leading-tight', bodyClass: 'text-lg leading-8 font-light', defaultFont: 'font-sans-sc', defaultColor: '#1e293b', defaultBg: '#ffffff' },
+        poster: { id: 'poster', name: '大字报', desc: '冲击力强', class: 'bg-[#ff3b30]', titleClass: 'text-4xl font-black mb-4 uppercase tracking-tighter leading-none border-b-4 border-current pb-4', bodyClass: 'text-xl font-bold leading-normal', defaultFont: 'font-sans-sc', defaultColor: '#ffffff', defaultBg: '#ff3b30' },
+        memo: { id: 'memo', name: '备忘录', desc: '亲切列表', class: 'pattern-paper', titleClass: 'text-2xl font-bold mb-4 px-2', bodyClass: 'text-lg leading-[3rem] font-medium px-2', defaultFont: 'font-sans-sc', defaultColor: '#334155', defaultBg: '#fbfbfd' },
+        journal: { id: 'journal', name: '手帐风', desc: '可爱拼贴', class: 'pattern-grid', titleClass: 'text-4xl mb-6 transform -rotate-2', bodyClass: 'text-lg leading-loose', defaultFont: 'font-handwriting', defaultColor: '#57534e', defaultBg: '#fffdf5' },
+        drygoods: { id: 'drygoods', name: '硬核干货', desc: '深色专业', class: 'bg-[#0f172a]', titleClass: 'text-3xl font-bold mb-6 border-l-4 border-blue-500 pl-4', bodyClass: 'text-base leading-7 tracking-wide', defaultFont: 'font-sans-sc', defaultColor: '#e2e8f0', defaultBg: '#0f172a' }
+    };
+
+    let currentStyle = 'minimal';
+    let coverImageData = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        initUI();
+        resetCustomControls(styles[currentStyle]);
+        renderApp();
+    });
+
+    function initUI() {
+        document.getElementById('contentInput').value = defaultText;
+        document.getElementById('contentInput').addEventListener('input', debounce(renderApp, 300));
+        const styleContainer = document.getElementById('styleSelector');
+        Object.values(styles).forEach(style => {
+            const btn = document.createElement('button');
+            btn.className = `p-2 rounded-lg border text-left transition-all hover:shadow-sm flex flex-col justify-between h-14 ${currentStyle === style.id ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-gray-200 bg-white'}`;
+            btn.innerHTML = `<span class="font-bold text-xs ${currentStyle === style.id ? 'text-blue-700' : 'text-gray-700'}">${style.name}</span>`;
+            btn.onclick = () => {
+                currentStyle = style.id;
+                Array.from(styleContainer.children).forEach(c => c.className = c.className.replace('border-blue-500 bg-blue-50 ring-1 ring-blue-500', 'border-gray-200 bg-white'));
+                btn.className = btn.className.replace('border-gray-200 bg-white', 'border-blue-500 bg-blue-50 ring-1 ring-blue-500');
+                resetCustomControls(styles[currentStyle]);
+                renderApp();
+            };
+            styleContainer.appendChild(btn);
+        });
+    }
+
+    function parseInput() {
+        const lines = document.getElementById('contentInput').value.split('\n').filter(l => l.trim());
+        return { title: lines[0] || '无标题', paragraphs: lines.slice(1) };
+    }
+
+    function renderApp() {
+        const container = document.getElementById('previewContainer');
+        container.innerHTML = '';
+        const data = parseInput();
+        const styleObj = styles[currentStyle];
+        const customFont = document.getElementById('fontSelect').value;
+        const fontScale = parseFloat(document.getElementById('fontSizeRange').value);
+        const customBg = document.getElementById('bgColorPicker').value;
+        const customColor = document.getElementById('textColorPicker').value;
+        const dateText = document.getElementById('dateInput').value;
+        const authorText = document.getElementById('authorInput').value;
+        const measureBox = document.getElementById('measureContainer');
+        measureBox.className = `xhs-card p-8 fixed top-0 left-0 z-[-1] opacity-0 ${styleObj.class} ${customFont}`;
+        measureBox.style.backgroundColor = customBg; 
+        measureBox.style.color = customColor;
+        const buildTitle = () => `<h1 class="${styleObj.titleClass}" style="font-size: ${2.25 * fontScale}rem; line-height: 1.2;">${data.title}</h1>`;
+        const buildMeta = () => dateText ? `<div class="text-xs font-mono opacity-60 mb-4 uppercase tracking-widest border-b border-current/20 pb-2 inline-block">${dateText}</div>` : '';
+        const buildImage = () => coverImageData ? `<div class="w-[calc(100%+4rem)] -ml-8 -mt-8 mb-6 h-64 overflow-hidden relative"><img src="${coverImageData}" class="w-full h-full object-cover"></div>` : '';
+        const buildPara = (text) => {
+            const isList = text.startsWith('-') || text.match(/^\d+\./);
+            return `<div class="mb-2 opacity-90 ${styleObj.bodyClass} ${isList ? 'pl-2' : ''}" style="font-size: ${1.125 * fontScale}rem;">${text}</div>`;
+        };
+        let cards = [];
+        const MAX_HEIGHT = 520;
+        let currentPageContent = [];
+        measureBox.innerHTML = (coverImageData ? buildImage() : '') + buildMeta() + buildTitle();
+        currentPageContent.push(measureBox.innerHTML);
+        data.paragraphs.forEach(para => {
+            const pHTML = buildPara(para);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = pHTML;
+            measureBox.appendChild(tempDiv);
+            if (measureBox.offsetHeight > MAX_HEIGHT) {
+                cards.push(currentPageContent);
+                currentPageContent = [pHTML];
+                measureBox.innerHTML = pHTML;
+            } else {
+                currentPageContent.push(pHTML);
+            }
+        });
+        if (currentPageContent.length > 0) cards.push(currentPageContent);
+        cards.forEach((contentArr, index) => {
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = `xhs-card flex flex-col p-8 shadow-xl relative group ${styleObj.class} ${customFont} preview-scale-wrapper`;
+            cardWrapper.style.backgroundColor = customBg;
+            cardWrapper.style.color = customColor;
+            if (styleObj.id === 'minimal') {
+                const bar = document.createElement('div');
+                bar.className = 'absolute bottom-0 left-0 w-full h-1.5 opacity-50';
+                bar.style.background = `linear-gradient(to right, ${customColor}, transparent)`;
+                cardWrapper.appendChild(bar);
+            }
+            const inner = document.createElement('div');
+            inner.className = 'flex-1 relative z-10';
+            inner.innerHTML = contentArr.join('');
+            cardWrapper.appendChild(inner);
+            const footer = document.createElement('div');
+            footer.className = 'mt-auto pt-4 flex justify-between items-center text-[10px] opacity-40 font-mono tracking-widest border-t border-current/10 relative z-10';
+            footer.innerHTML = `<span>${index + 1} / ${cards.length}</span><span>${authorText}</span>`;
+            cardWrapper.appendChild(footer);
+            container.appendChild(cardWrapper);
+        });
+        lucide.createIcons();
+    }
+
+    function handleExport() {
+        const cards = document.querySelectorAll('.xhs-card');
+        const modal = document.getElementById('exportModal');
+        const container = document.getElementById('exportImagesContainer');
+        const btn = document.getElementById('downloadBtn');
+        const originalText = document.getElementById('exportText').innerText;
+        document.getElementById('exportText').innerText = "生成中...";
+        btn.disabled = true;
+        container.innerHTML = ''; 
+        cards.forEach(c => c.classList.remove('preview-scale-wrapper'));
+        const promises = Array.from(cards).map(async (card) => {
+            const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+            return canvas.toDataURL('image/png');
+        });
+        Promise.all(promises).then(images => {
+            images.forEach(imgData => {
+                const img = document.createElement('img');
+                img.src = imgData;
+                img.className = 'w-full max-w-[300px] mx-auto rounded shadow-lg border border-gray-700';
+                container.appendChild(img);
+            });
+            modal.classList.remove('hidden');
+        }).catch(err => {
+            console.error(err);
+            alert('生成失败');
+        }).finally(() => {
+            cards.forEach(c => c.classList.add('preview-scale-wrapper'));
+            document.getElementById('exportText').innerText = originalText;
+            btn.disabled = false;
+        });
+    }
+
+    function closeExportModal() {
+        document.getElementById('exportModal').classList.add('hidden');
+    }
+
+    function resetCustomControls(style) {
+        document.getElementById('fontSelect').value = style.defaultFont;
+        updateColorPreview('bg', style.defaultBg);
+        updateColorPreview('text', style.defaultColor);
+    }
+    
+    function updateColorPreview(type, val) {
+        const el = document.getElementById(type === 'bg' ? 'bgColorPicker' : 'textColorPicker');
+        const prev = document.getElementById(type === 'bg' ? 'bgColorPreview' : 'textColorPreview');
+        el.value = val;
+        prev.style.backgroundColor = val;
+    }
+
+    function handleImageUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                coverImageData = e.target.result;
+                document.getElementById('imagePreview').src = coverImageData;
+                document.getElementById('imagePreviewArea').classList.remove('hidden');
+                document.getElementById('uploadBtn').classList.add('hidden');
+                renderApp();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function removeImage() {
+        coverImageData = null;
+        document.getElementById('imageInput').value = '';
+        document.getElementById('imagePreviewArea').classList.add('hidden');
+        document.getElementById('uploadBtn').classList.remove('hidden');
+        renderApp();
+    }
+
+    function toggleMobileEditor() {
+        const drawer = document.getElementById('editorPanel');
+        const overlay = document.getElementById('drawerOverlay');
+        drawer.classList.toggle('active');
+        if (drawer.classList.contains('active')) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+</script>
 </body>
 </html>
